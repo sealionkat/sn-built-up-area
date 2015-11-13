@@ -69,15 +69,16 @@ def run():
     main_image_w = window_size * main_windows_count_w
     main_image_h = window_size * main_windows_count_h
 
-    for n in range(num_images):
-        print('Generating image %d...' % n)
-        main_image = create_main_image(main_image_w, main_image_h, main_windows_count_w, main_windows_count_h, window_size)
-        final_images = create_final_images(main_image, final_images_w, final_images_h, final_windows_count_w, final_windows_count_h, window_size)
+    with open('fake_data/train.txt', 'wb') as f:
+        for n in range(num_images):
+            print('Generating image %d...' % n)
+            main_image = create_main_image(main_image_w, main_image_h, main_windows_count_w, main_windows_count_h, window_size)
+            final_images = create_final_images(main_image, final_images_w, final_images_h, final_windows_count_w, final_windows_count_h, window_size)
 
-        for img in final_images:
-            filename = '../fake_data/%04d__%03d_%03d.png' % (n, img[1], img[2])
-            img[0].save(filename)
-            # TODO: save label
+            for img in final_images:
+                filename = 'fake_data/%04d__%03d_%03d.png' % (n, img[1], img[2])
+                img[0].save(filename)
+                f.write(('%s %d\n' % (filename, img[3])).encode())
 
 if __name__ == '__main__':
     run()
