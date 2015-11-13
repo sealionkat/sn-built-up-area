@@ -75,7 +75,7 @@ def run():
         final_images = create_final_images(main_image, final_images_w, final_images_h, final_windows_count_w, final_windows_count_h, window_size)
 
         for img in final_images:
-            filename = './data/%04d__%03d_%03d.png' % (n, img[1], img[2])
+            filename = '../fake_data/%04d__%03d_%03d.png' % (n, img[1], img[2])
             img[0].save(filename)
             # TODO: save label
 
