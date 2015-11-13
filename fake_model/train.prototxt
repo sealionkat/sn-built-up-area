@@ -1,6 +1,6 @@
 name: "FakeNet"
 
-label {
+layer {
     name: "data"
     type: "ImageData"
 
@@ -9,12 +9,148 @@ label {
 
     image_data_param: {
         source: "train.txt"
-        batch_size: 4
-        shuffle: true
+        batch_size: 64
+        shuffle: false
     }
 
     transform_param: {
         mirror: false
         scale: 0.00390625
+    }
+}
+
+# 64 * 3 * 220 * 220
+
+layer {
+    name: "convolution_layer"
+    type: "Convolution"
+
+    bottom: "data"
+    top: "conv_blob"
+
+    param {
+        lr_mult: 1
+    }
+
+    param {
+        lr_mult: 2
+    }
+
+    convolution_param: {
+        num_output: 20
+        kernel_size: 5
+
+        pad: 3
+        stride: 2
+        bias_term: true
+
+        weight_filler {
+            type: "xavier"
+        }
+
+        bias_filler {
+            type: "constant"
+        }
+    }
+}
+
+# 64 * 20 * 111 * 111
+
+layer {
+    name: "pool_layer"
+    type: "Pooling"
+
+    bottom: "conv_blob"
+    top: "pool_blob"
+
+    pooling_param: {
+        kernel_size: 2
+        pad: 1
+        stride: 2
+    }
+}
+
+layer {
+    name: "inner_layer"
+    type: "InnerProduct"
+
+    bottom: "pool_blob"
+    top: "ip_blob"
+
+    param {
+        lr_mult: 1
+    }
+
+    param {
+        lr_mult: 2
+    }
+
+    inner_product_param: {
+        num_output: 500
+
+        weight_filler {
+            type: "xavier"
+        }
+
+        bias_filler {
+            type: "constant"
+        }
+    }
+}
+
+layer {
+    name: "relu_layer"
+    type: "ReLU"
+
+    bottom: "ip_blob"
+    top: "ip_blob"
+}
+
+layer {
+    name: "inner_layer_2"
+    type: "InnerProduct"
+
+    bottom: "ip_blob"
+    top: "ip_2_blob"
+
+    param {
+        lr_mult: 1
+    }
+
+    param {
+        lr_mult: 2
+    }
+
+    inner_product_param: {
+        num_output: 10
+
+        weight_filler {
+            type: "xavier"
+        }
+
+        bias_filler {
+            type: "constant"
+        }
+    }
+}
+
+layer {
+    name: "loss_layer"
+    type: "SoftmaxWithLoss"
+
+    bottom: "ip_2_blob"
+    bottom: "label"
+}
+
+layer {
+    name: "accuracy_layer"
+    type: "Accuracy"
+
+    bottom: "ip_2_blob"
+    bottom: "label"
+    top: "accuracy"
+
+    include {
+        phase: TEST
     }
 }
