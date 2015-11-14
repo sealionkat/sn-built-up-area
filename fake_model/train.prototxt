@@ -8,9 +8,10 @@ layer {
     top: "label"
 
     image_data_param: {
-        source: "train.txt"
-        batch_size: 64
+        source: "fake_data/train.txt"
+        batch_size: 49
         shuffle: false
+        is_color: false
     }
 
     transform_param: {
@@ -18,8 +19,6 @@ layer {
         scale: 0.00390625
     }
 }
-
-# 64 * 3 * 220 * 220
 
 layer {
     name: "convolution_layer"
@@ -54,8 +53,6 @@ layer {
     }
 }
 
-# 64 * 20 * 111 * 111
-
 layer {
     name: "pool_layer"
     type: "Pooling"
@@ -86,7 +83,7 @@ layer {
     }
 
     inner_product_param: {
-        num_output: 500
+        num_output: 200
 
         weight_filler {
             type: "xavier"
@@ -100,6 +97,14 @@ layer {
 
 layer {
     name: "relu_layer"
+    type: "ReLU"
+
+    bottom: "ip_blob"
+    top: "ip_blob"
+}
+
+layer {
+    name: "relu_2_layer"
     type: "ReLU"
 
     bottom: "ip_blob"
