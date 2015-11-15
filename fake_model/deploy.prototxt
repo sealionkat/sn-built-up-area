@@ -1,0 +1,135 @@
+name: "FakeNet"
+
+input: "data"
+input_shape {
+    dim: 49
+    dim: 1
+    dim: 140
+    dim: 140
+}
+
+layer {
+    name: "convolution_layer"
+    type: "Convolution"
+
+    bottom: "data"
+    top: "conv_blob"
+
+    param {
+        lr_mult: 1
+    }
+
+    param {
+        lr_mult: 2
+    }
+
+    convolution_param: {
+        num_output: 20
+        kernel_size: 5
+
+        pad: 3
+        stride: 2
+        bias_term: true
+
+        weight_filler {
+            type: "xavier"
+        }
+
+        bias_filler {
+            type: "constant"
+        }
+    }
+}
+
+layer {
+    name: "pool_layer"
+    type: "Pooling"
+
+    bottom: "conv_blob"
+    top: "pool_blob"
+
+    pooling_param: {
+        kernel_size: 2
+        pad: 1
+        stride: 2
+    }
+}
+
+layer {
+    name: "inner_layer"
+    type: "InnerProduct"
+
+    bottom: "pool_blob"
+    top: "ip_blob"
+
+    param {
+        lr_mult: 1
+    }
+
+    param {
+        lr_mult: 2
+    }
+
+    inner_product_param: {
+        num_output: 200
+
+        weight_filler {
+            type: "xavier"
+        }
+
+        bias_filler {
+            type: "constant"
+        }
+    }
+}
+
+layer {
+    name: "relu_layer"
+    type: "ReLU"
+
+    bottom: "ip_blob"
+    top: "ip_blob"
+}
+
+layer {
+    name: "relu_2_layer"
+    type: "ReLU"
+
+    bottom: "ip_blob"
+    top: "ip_blob"
+}
+
+layer {
+    name: "inner_layer_2"
+    type: "InnerProduct"
+
+    bottom: "ip_blob"
+    top: "ip_2_blob"
+
+    param {
+        lr_mult: 1
+    }
+
+    param {
+        lr_mult: 2
+    }
+
+    inner_product_param: {
+        num_output: 10
+
+        weight_filler {
+            type: "xavier"
+        }
+
+        bias_filler {
+            type: "constant"
+        }
+    }
+}
+
+layer {
+    name: "prob"
+    type: "Softmax"
+    bottom: "ip_2_blob"
+    top: "prob"
+}
