@@ -1,0 +1,28 @@
+1. Projekt -> Nowy
+2. W Internecie -> OpenLayersPlugin -> Google Maps -> Google Satellite
+3. Wybór obszaru (Miasto - budynki)
+4. Skala 1:5000
+5. Wektor -> OpenStreetMap -> Pobierz Dane -> Z obszaru mapy
+6. Warstwa -> Dodaj warstwę -> Dodaj warstwę wektorową
+7. Multipolygon
+8. Jeżeli są tylko budynki to ok, jeżeli nie to inny obszaru lub wyczyszczenie potem
+9. Skala 1:2500
+10. Wyłączenie warstwy zdjęć
+11. Projekt -> Zapisz jako obraz (vec_X.png)
+12. Wyłączenie warstwy wektorowej, włączenie zdjęcia
+13. Projekt -> Zapisz jako obraz (map_X.png)
+14. Wczytanie w gimpie jako warstwy
+15. GIMP: Plik -> Otwórz jako warstwy
+16. Zaznaczenie według koloru (tło)
+17. Edycja -> Wyczyść
+18. Zaznaczenie -> Całość
+19. Przesunięcie (dopasowanie warstw - uwaga na perspektywę)
+20. Czyszczenie niepoprawnych danych
+21. Jeżeli jakiś budynek nie pokryty można zamalować ręcznie
+22. Warstwa -> Dopasuj warstwę do wymiarów obrazu
+23. Obraz -> Wymiary płótna -> 820x820
+24. Warstwa -> Nowa warstwa -> Biała
+25. Przeciągnięcie warstwy w dół
+26. Zablokowanie warstwy mapy i wektorów
+27. Można przesunąć warstwy tak aby dobrze pasowały
+28. Zapis warstwy wektorowej z białym tłem i warstwy mapy (można powtórzyć dla innego przesunięcia, ale żeby za dużo się nie nakładało)
