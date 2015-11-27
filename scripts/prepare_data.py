@@ -16,15 +16,22 @@ IMG_EXTENSION = '.png'
 FINAL_IMG_EXTENSION = '.jpg'
 
 TRAIN_DB_FILENAME = OUT_DIR + 'train.txt'
-TEST_DB_FILENAME = OUT_DIR + 'test.txt'
+PROCESSED_FILENAME = OUT_DIR + 'processed.txt'
+#TEST_DB_FILENAME = OUT_DIR + 'test.txt'
 
 WINDOW_SIZE = 20
 WINDOWS_COUNT = 10
-TESTS_COUNT = 0
+#TESTS_COUNT = 0
 
 
 def get_input_data():
     in_data = []
+
+    try:
+        with open(PROCESSED_FILENAME, 'r') as f:
+            existing_data = [line.strip() for line in f.readlines() if len(line.strip()) > 0]
+    except IOError:
+        existing_data = []
 
     map_files = []
     vec_files = []
@@ -37,12 +44,12 @@ def get_input_data():
                 vec_files.append(f)
 
     for mf in map_files:
-        i = int(mf.replace(MAP_PREFIX, '').replace(IMG_EXTENSION, ''))
+        i = mf.replace(MAP_PREFIX, '').replace(IMG_EXTENSION, '')
         vf = str.format('{}{}{}', VEC_PREFIX, i, IMG_EXTENSION)
-        if vf in vec_files:
-            in_data.append((mf, vf))
+        if vf in vec_files and i not in existing_data:
+            in_data.append((mf, vf, i))
 
-    return in_data
+    return in_data, len(existing_data) * 8
 
 
 def transpose_images(images, direction):
@@ -98,11 +105,9 @@ def create_final_images(main_images):
 
 
 def main():
-    input_data = get_input_data()
+    input_data, next_id = get_input_data()
     all_count = len(input_data) * 8
     n = 0
-
-    image_entries = []
 
     for d in input_data:
         map_image = Image.open(IN_DIR + d[0])
@@ -111,32 +116,35 @@ def main():
         images = generate_more_images(map_image, vec_image)
 
         for i in images:
-            print(str.format('Processing image {} / {}...', n + 1, all_count))
+            print(str.format('Processing image {} / {}... [{}]', n + 1, all_count, d[2]))
             final_images = create_final_images(i)
 
-            entries = []
-
-            for entry in final_images:
-                filename = str.format('{0}{1:0>4}__{2:0>3}_{3:0>3}{4}', OUT_DIR, n, entry[1], entry[2], FINAL_IMG_EXTENSION)
-                entry[0].save(filename)
-                entries.append((filename, entry[3]))
+            with open(TRAIN_DB_FILENAME, 'a') as f:
+                for entry in final_images:
+                    filename = str.format('{0}{1:0>4}__{2:0>3}_{3:0>3}{4}', OUT_DIR, n + next_id, entry[1], entry[2], FINAL_IMG_EXTENSION)
+                    entry[0].save(filename)
+                    f.write(str.format('{0} {1}\n', filename, entry[3]))
 
             n += 1
-            image_entries.append(entries)
 
-    if TESTS_COUNT > 0:
-        with open(TEST_DB_FILENAME, 'w') as f:
-            for i in range(TESTS_COUNT):
-                entries = choice(image_entries)
-                image_entries.remove(entries)
+        with open(PROCESSED_FILENAME, 'a') as f:
+            f.write(str.format('{0}\n', d[2]))
 
-                for entry in entries:
-                    f.write(str.format('{0} {1}\n', entry[0], entry[1]))
+    #if TESTS_COUNT > 0:
+    #    with open(TEST_DB_FILENAME, 'w') as f:
+    #        for i in range(TESTS_COUNT):
+    #            entries = choice(image_entries)
+    #            image_entries.remove(entries)
 
-    with open(TRAIN_DB_FILENAME, 'w') as f:
-        for entries in image_entries:
-            for entry in entries:
-                f.write(str.format('{0} {1}\n', entry[0], entry[1]))
+    #            for entry in entries:
+    #                f.write(str.format('{0} {1}\n', entry[0], entry[1]))
+
+    #with open(TRAIN_DB_FILENAME, 'a') as f:
+    #    for entries in image_entries:
+    #        for entry in entries:
+    #            f.write(str.format('{0} {1}\n', entry[0], entry[1]))
+
+    print('\nDone!')
 
 
 if __name__ == '__main__':
