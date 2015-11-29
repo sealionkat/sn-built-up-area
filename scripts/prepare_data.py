@@ -4,7 +4,7 @@ from PIL import Image
 from random import choice
 
 
-PREFIX_DIR = '../'
+PREFIX_DIR = ''
 
 IN_DIR = PREFIX_DIR + 'maps/'
 OUT_DIR = PREFIX_DIR + 'data/'
