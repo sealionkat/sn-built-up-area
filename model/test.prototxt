@@ -1,23 +1,11 @@
 name: "MapNet"
 
-layer {
-    name: "data"
-    type: "ImageData"
-
-    top: "data"
-    top: "label"
-
-    image_data_param: {
-        source: "data/train.txt"
-        batch_size: 25
-        shuffle: false
-        is_color: true
-    }
-
-    transform_param: {
-        mirror: false
-        scale: 0.00390625
-    }
+input: "data"
+input_shape {
+    dim: 37
+    dim: 3
+    dim: 100
+    dim: 100
 }
 
 layer {
@@ -363,22 +351,8 @@ layer {
 
 
 layer {
-    name: "loss_layer"
-    type: "SoftmaxWithLoss"
-
+    name: "prob"
+    type: "Softmax"
     bottom: "fc8"
-    bottom: "label"
-}
-
-layer {
-    name: "accuracy_layer"
-    type: "Accuracy"
-
-    bottom: "fc8"
-    bottom: "label"
-    top: "accuracy"
-
-    include {
-        phase: TEST
-    }
+    top: "prob"
 }

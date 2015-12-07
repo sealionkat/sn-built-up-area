@@ -19,8 +19,11 @@ TRAIN_DB_FILENAME = OUT_DIR + 'train.txt'
 PROCESSED_FILENAME = OUT_DIR + 'processed.txt'
 #TEST_DB_FILENAME = OUT_DIR + 'test.txt'
 
+INPUT_IMAGE_SIZE = 820
+
 WINDOW_SIZE = 20
-WINDOWS_COUNT = 10
+WINDOWS_COUNT = 2#10
+
 #TESTS_COUNT = 0
 
 
@@ -88,14 +91,17 @@ def get_label(vec_img):
 def create_final_images(main_images):
     final_images = []
 
-    num_windows = WINDOWS_COUNT * 2 + 1
+    windows_in_final_image = WINDOWS_COUNT * 2 + 1
+    final_image_size = windows_in_final_image * WINDOW_SIZE
+    num_final_images = int((INPUT_IMAGE_SIZE - (2 * WINDOWS_COUNT * WINDOW_SIZE)) / WINDOW_SIZE)
 
-    for i in range(num_windows):
-        for j in range(num_windows):
+
+    for i in range(num_final_images):
+        for j in range(num_final_images):
             pos_left = j * WINDOW_SIZE
-            pos_right = pos_left + WINDOW_SIZE * num_windows
+            pos_right = pos_left + final_image_size
             pos_up = i * WINDOW_SIZE
-            pos_down = pos_up + WINDOW_SIZE * num_windows
+            pos_down = pos_up + final_image_size
             map_img = main_images[0].crop((pos_left, pos_up, pos_right, pos_down))
             vec_img = main_images[1].crop((pos_left, pos_up, pos_right, pos_down))
 
