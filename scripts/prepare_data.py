@@ -1,7 +1,7 @@
 
 from os import listdir
 from PIL import Image
-from random import choice
+from sys import argv
 
 
 PREFIX_DIR = ''
@@ -27,7 +27,7 @@ WINDOWS_COUNT = 2#10
 #TESTS_COUNT = 0
 
 
-def get_input_data():
+def get_input_data(selected_data):
     in_data = []
 
     try:
@@ -50,6 +50,8 @@ def get_input_data():
         i = mf.replace(MAP_PREFIX, '').replace(IMG_EXTENSION, '')
         vf = str.format('{}{}{}', VEC_PREFIX, i, IMG_EXTENSION)
         if vf in vec_files and i not in existing_data:
+            if selected_data and i not in selected_data:
+                continue
             in_data.append((mf, vf, i))
 
     return in_data, len(existing_data) * 8
@@ -111,7 +113,12 @@ def create_final_images(main_images):
 
 
 def main():
-    input_data, next_id = get_input_data()
+    selected_data = []
+
+    if len(argv) == 2:
+        selected_data = argv[1].split(',')
+
+    input_data, next_id = get_input_data(selected_data)
     all_count = len(input_data) * 8
     n = 0
 

@@ -15,7 +15,7 @@ OUT_DIR = PREFIX_DIR + 'data/'
 TESTS_DIR = PREFIX_DIR + 'tests/'
 
 TRAIN_DB_FILENAME = OUT_DIR + 'train.txt'
-MODEL_FILE = PREFIX_DIR + 'snapshots/_iter_66.caffemodel'
+MODEL_FILE = PREFIX_DIR + 'snapshots/_iter_2309.caffemodel'
 
 INPUT_IMAGE_SIZE = 820
 
