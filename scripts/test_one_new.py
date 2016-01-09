@@ -1,5 +1,8 @@
 from sys import argv, exit
 from PIL import Image
+import numpy as np
+import matplotlib.pyplot
+import skimage
 
 import sys
 
@@ -131,11 +134,13 @@ def main():
             net_img = get_net_img_from_map(orig_map_img, x, y)
             n = y * NUM_PIXELS + x
 
-    #         #img = caffe.io.load_image(row[j][4], color=True)
-    #         #net.blobs['data'].data[n % CAFFE_NUM_IMAGES] = transformer.preprocess('data', net_img)
+            in_data = skimage.img_as_float(np.asarray(net_img, dtype=np.uint8)[:, :, :3]).astype(np.float32)
+
+            #img = caffe.io.load_image(row[j][4], color=True)
+            net.blobs['data'].data[n % CAFFE_NUM_IMAGES] = transformer.preprocess('data', in_data)
 
             if (n + 1) % CAFFE_NUM_IMAGES == 0:
-                print('Calculatting error with Caffe...')
+                print('Calculating error with Caffe...')
 
                 out = net.forward()
 
