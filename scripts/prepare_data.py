@@ -138,6 +138,10 @@ def main():
                     entry[0].save(filename)
                     f.write(str.format('{0} {1}\n', filename, entry[3]))
 
+            # Zapis oryginalnych
+            i[0].save(str.format('{0}{1:0>4}__orig_map{2}', OUT_DIR, n + next_id, IMG_EXTENSION))
+            i[1].save(str.format('{0}{1:0>4}__orig_vec{2}', OUT_DIR, n + next_id, IMG_EXTENSION))
+
             n += 1
 
         with open(PROCESSED_FILENAME, 'a') as f:
