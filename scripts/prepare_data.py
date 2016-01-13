@@ -30,6 +30,9 @@ WINDOWS_COUNT = 2#10
 def get_input_data(selected_data):
     in_data = []
 
+    if selected_data:
+        selected_data = [str.format('{0:0>2}', int(x)) for x in selected_data]
+
     try:
         with open(PROCESSED_FILENAME, 'r') as f:
             existing_data = [line.strip() for line in f.readlines() if len(line.strip()) > 0]

@@ -19,7 +19,7 @@ TESTS_DIR = PREFIX_DIR + 'tests/'
 IMG_EXTENSION = '.png'
 
 TRAIN_DB_FILENAME = OUT_DIR + 'train.txt'
-MODEL_FILE = PREFIX_DIR + 'snapshots/_iter_1774.caffemodel'
+MODEL_FILE = PREFIX_DIR + 'snapshots/_iter_100000.caffemodel'
 
 INPUT_IMAGE_SIZE = 820
 
@@ -110,10 +110,12 @@ def get_net_img_from_map(map_img, x, y):
 
 
 def main():
-    if len(argv) != 2:
+    if len(argv) != 3:
+        print('Usage test_one_pixel.sh <Model path> <MapID>')
         exit(1)
 
-    id = argv[1]
+    MODEL_FILE = PREFIX_DIR + argv[1]
+    id = argv[2]
 
     orig_map_img = Image.open(str.format('{0}{1:0>4}__orig_map{2}', OUT_DIR, id, IMG_EXTENSION))
     orig_vec_img = Image.open(str.format('{0}{1:0>4}__orig_vec{2}', OUT_DIR, id, IMG_EXTENSION))

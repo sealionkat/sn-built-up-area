@@ -17,13 +17,14 @@ gamma: 0.0001
 power: 0.75
 
 # Wypisywanie co X iteracji
-display: 1
+display: 5
 
-# Max liczba iteracji (21*21 => 441 / 49 => 9 * 448 => 4032)
-max_iter: 4032
+# Max liczba iteracji (37x37 => 1369 / 25 => 55 * 448 => 25k)
+# 55 * 10 * 8 = 5k
+max_iter: 100000
 
 
-snapshot: 5000
+snapshot: 1000
 snapshot_prefix: "snapshots/"
 
 solver_mode: CPU

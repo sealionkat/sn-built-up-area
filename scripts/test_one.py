@@ -15,7 +15,7 @@ OUT_DIR = PREFIX_DIR + 'data/'
 TESTS_DIR = PREFIX_DIR + 'tests/'
 
 TRAIN_DB_FILENAME = OUT_DIR + 'train.txt'
-MODEL_FILE = PREFIX_DIR + 'snapshots/_iter_2309.caffemodel'
+MODEL_FILE = PREFIX_DIR + 'snapshots/_iter_100000.caffemodel'
 
 INPUT_IMAGE_SIZE = 820
 
@@ -34,10 +34,12 @@ def set_window_from_img(image, i, j, val):
     image.paste(part, (j * WINDOW_SIZE, i * WINDOW_SIZE, (j + 1) * WINDOW_SIZE, (i + 1) * WINDOW_SIZE))
 
 def main():
-    if len(argv) != 2:
+    if len(argv) != 3:
+        print('Usage: test_one.sh <Model path> <MapID>')
         exit(1)
 
-    id = argv[1]
+    MODEL_FILE = PREFIX_DIR + argv[1]
+    id = argv[2]
 
     with open(TRAIN_DB_FILENAME, 'r') as f:
         data = [
